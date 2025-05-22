@@ -7,5 +7,5 @@ const persona = {
     }
 
 }
-const resultado = `Me llamo ${persona.nombre}, tengo ${persona.edad} años y vivo en ${persona.direccion.ciudad}`;
+const resultado = 'Me llamo ' + persona.nombre + ', tengo ' + persona.edad + ' años y vivo en ' + persona.direccion.ciudad;
 console.log(resultado);

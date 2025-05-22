@@ -5,5 +5,5 @@ const productos = [
     {nombre: "Monitor", precio: 3000},
 ];
 
-const r= productos.filter((producto) => producto.precio > 1000).map((producto) => `${producto.nombre} cuesta ${producto.precio}`);
+const r= productos.filter((producto) => producto.precio > 1000).map((producto) => producto.nombre + producto.precio);
 console.log(r);
