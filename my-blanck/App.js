@@ -1,15 +1,36 @@
+/* zona 1 importaciones*/
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
+const Texto = (props) => {
+  const { contenidos } = props;
+
+ return(
+ <Text>{contenidos}</Text>
+
+ );
+};
+
+
+
+
+/* zona 2 main*/
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+
+      <Button title='Chambea'> </Button>
+
+       <Texto contenidos='Hola'></Texto>
+       <Texto contenidos='mundo'></Texto>
+       <Texto contenidos='React native'></Texto>
       <StatusBar style="auto" />
     </View>
   );
 }
 
+
+/* zona 3 estilos */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
