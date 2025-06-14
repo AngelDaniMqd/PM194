@@ -4,18 +4,21 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import React, {useState} from 'react';
 
 
-const Texto = (props) => {
-  const [contenido, setContenido] = useState('Hola mundo React Native');
+const Texto = ({style}) => {
+  
+  const [contenido, setContenido] = useState('Hola mundo React Native') ;
   const actualizaTexto = () => {setContenido('Estado actualizado del Text')};
 
  return(
- <Text onPress={actualizaTexto}>{contenido}</Text>
+ <Text  style={[styles.text, style]} onPress={actualizaTexto}>{contenido}</Text>
 
  );
 };
 
-const Boton = (props) =>{
-  const [texto, setTexto] = useState('Hola pepe');
+
+
+const Boton = () =>{
+  const [texto, setTexto] = useState('Hola Cecy');
   const actualizaTexto = () => {setTexto('jasjajs')};
 
  return(
@@ -31,9 +34,9 @@ export default function App() {
 
       <Boton title='Chambea'> </Boton>
 
-       <Texto>Hola</Texto>
-       <Texto>mundo</Texto>
-       <Texto>React native</Texto>
+       <Texto style={styles.red}>Hola</Texto>
+       <Texto style={styles.blue}>mundo</Texto>
+       <Texto style={styles.green}>React native</Texto>
       <StatusBar style="auto" />
     </View>
   );
@@ -45,7 +48,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
+    alignItems: 'stretch',
     justifyContent: 'center',
+    flexDirection: 'row-reverse',
   },
+
+  text:{
+    color: 'white',
+    fontSize: 20,
+   
+  },
+  red:{backgroundColor: 'red'},
+  blue:{backgroundColor: 'blue'},
+  green:{backgroundColor: 'green'},
 });
