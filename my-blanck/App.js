@@ -3,10 +3,23 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Switch } from 'react-native';
 import React, {useState} from 'react';
 
-
-const [isEnable, setIsEnable] = useState(false);
-const toggleSwitch = () => setIsEnable(previousState => !previousState);
-
+const Interruptor = () => {
+  const [isEnable, setIsEnable] = useState(false);
+  const toggleSwitch = () => setIsEnable(previousState => !previousState);
+  return(
+   <View style={styles.container}>
+    <Text >
+      {isEnable ? 'Activado' : 'Desactivado'}
+    </Text>
+    <Switch
+      trackColor={{false: '#767577', true: '#81b0ff'}}
+      thumbColor={isEnable ? '#f5dd4b' : '#f4f3f4'}
+      onValueChange={toggleSwitch}
+      value={isEnable}>
+    </Switch>
+   </View>
+  )
+};
 
 const Texto = ({style}) => {
   
@@ -17,6 +30,7 @@ const Texto = ({style}) => {
   <View style ={{margin: 10}}>
     <Text style={[styles.text, style]}> {contenido} </Text>
     <Button title='actualizaTexto' onPress={actualizaTexto} color="orange" accessibilityLabel=''/>
+    <Switch></Switch>
     </View>
  );
 };
@@ -37,12 +51,7 @@ export default function App() {
   return (
     <View style={styles.container}>
 
-      <Boton title='Chambea'> </Boton>
-
-       <Texto style={styles.red}>Hola</Texto>
-       <Texto style={styles.blue}>mundo</Texto>
-       <Texto style={styles.green}>React native</Texto>
-      <StatusBar style="auto" />
+     <Interruptor />
     </View>
   );
 }
