@@ -1,20 +1,25 @@
 /* zona 1 importaciones*/
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Switch } from 'react-native';
 import React, {useState} from 'react';
+
+
+const [isEnable, setIsEnable] = useState(false);
+const toggleSwitch = () => setIsEnable(previousState => !previousState);
 
 
 const Texto = ({style}) => {
   
   const [contenido, setContenido] = useState('Hola mundo React Native') ;
-  const actualizaTexto = () => {setContenido('Estado actualizado del Text')};
+  const actualizaTexto = () => {setContenido('Hola mundo como estas?')};
 
  return(
- <Text  style={[styles.text, style]} onPress={actualizaTexto}>{contenido}</Text>
-
+  <View style ={{margin: 10}}>
+    <Text style={[styles.text, style]}> {contenido} </Text>
+    <Button title='actualizaTexto' onPress={actualizaTexto} color="orange" accessibilityLabel=''/>
+    </View>
  );
 };
-
 
 
 const Boton = () =>{
@@ -50,7 +55,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'stretch',
     justifyContent: 'center',
-    flexDirection: 'row-reverse',
+  
   },
 
   text:{
