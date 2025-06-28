@@ -1,168 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  StyleSheet,
-  Text,
   View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
   Button,
-  Modal,
-  TextInput,
-  TouchableOpacity,
-  ScrollView
 } from "react-native";
 
-
 export default function App() {
-return(
-  <ScrollView contentContainerStyle={styles.background} showsVerticalScrollIndicator={false} horizontal={true}>
-    
-     <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
-    <Text>holaaa</Text>
+  const [Loading, setLoading] = useState(false);
+  const [Mensaje, setMensaje] = useState("Cargando...");
 
+  const simularCarga = () => {
+    setLoading(true);
+    setMensaje("Cargando...");
+    setTimeout(() => {
+      setLoading(false);
+      setMensaje("Carga completa");
+    }, 3000);
+  };
 
-  </ScrollView>
-)
+  return (
+    <View style={style.contaier}>
+      <Text style={style.titulo}>Carga</Text>
+      {Loading ? (
+        <>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text style={style.texto}>CARGANDO....</Text>
+        </>
+      ) : (
+        <>
+          <Button title="Iniciar Carga" onPress={simularCarga} />
+          {Mensaje !== "" && <Text style={style.exito}>{Mensaje}</Text>}
+        </>
+      )}
+    </View>
+  );
 }
 
-
-
-const styles = StyleSheet.create({
-background: {
-flex: 1,
-width: "100%",
-height: "100%",
-justifyContent: "center",
-alignItems: "center",
-},
+const style = StyleSheet.create({
+  contaier: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  titulo: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  texto: {
+    fontSize: 18,
+    color: "#555",
+    marginTop: 10,
+  },
+  exito: {
+    fontSize: 18,
+    color: "green",
+    marginTop: 10,
+  },
 });
