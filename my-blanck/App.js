@@ -1,61 +1,98 @@
-import React, { useState, useEffect } from "react";
-import {
+import React, { useEffect, useState } from "react";
+import {  SafeAreaView,
   View,
   Text,
-  ActivityIndicator,
+  FlatList,
+  SectionList,
   StyleSheet,
-  Button,
+  ActivityIndicator,
 } from "react-native";
 
 export default function App() {
-  const [Loading, setLoading] = useState(false);
-  const [Mensaje, setMensaje] = useState("Cargando...");
+  const [frutas, setFrutas] = useState([]);
+  const [verduras, setVerduras] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const API_URL = "http://127.0.0.1:8001/productos/"; 
+  useEffect(() => {
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        setFrutas(data.frutas);
+        setVerduras(data.verduras);
+      })
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
 
-  const simularCarga = () => {
-    setLoading(true);
-    setMensaje("Cargando...");
-    setTimeout(() => {
-      setLoading(false);
-      setMensaje("Carga completa");
-    }, 3000);
-  };
+  const renderItem = ({ item }) => (
+    <View style={styles.item}>
+      <Text style={styles.nombre}>{item.nombre}</Text>
+    </View>
+  );
+
+
+  const sections = [
+    { title: "Frutas", data: frutas },
+    { title: "Verduras", data: verduras },
+  ];
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Cargando datos...</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
-    <View style={style.contaier}>
-      <Text style={style.titulo}>Carga</Text>
-      {Loading ? (
-        <>
-          <ActivityIndicator size="large" color="#0000ff" />
-          <Text style={style.texto}>CARGANDO....</Text>
-        </>
-      ) : (
-        <>
-          <Button title="Iniciar Carga" onPress={simularCarga} />
-          {Mensaje !== "" && <Text style={style.exito}>{Mensaje}</Text>}
-        </>
-      )}
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Lista de Frutas (FlatList)</Text>
+      <FlatList
+        data={frutas}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderItem}
+      />
+
+      <Text style={styles.title}>Frutas y Verduras (SectionList)</Text>
+      <SectionList
+        sections={sections}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderItem}
+        renderSectionHeader={({ section: { title } }) => (
+          <Text style={styles.header}>{title}</Text>
+        )}
+      />
+    </SafeAreaView>
   );
 }
 
-const style = StyleSheet.create({
-  contaier: {
+const styles = StyleSheet.create({
+  container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    marginTop: 30,
+    paddingHorizontal: 16,
   },
-  titulo: {
-    fontSize: 24,
-    marginBottom: 20,
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginVertical: 12,
   },
-  texto: {
-    fontSize: 18,
-    color: "#555",
+  header: {
+    fontSize: 20,
+    fontWeight: "bold",
+    backgroundColor: "#ddd",
+    paddingVertical: 4,
+    paddingHorizontal: 10,
     marginTop: 10,
   },
-  exito: {
+  item: {
+    backgroundColor: "#f9c2ff",
+    padding: 10,
+    marginVertical: 4,
+    borderRadius: 5,
+  },
+  nombre: {
     fontSize: 18,
-    color: "green",
-    marginTop: 10,
   },
 });

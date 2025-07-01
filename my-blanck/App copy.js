@@ -9,13 +9,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-/**
- * Componente ModalPersonalizado
- * Props:
- * - visible: boolean, controla la visibilidad del modal
- * - onClose: función, se ejecuta al cerrar el modal
- * - children: contenido a mostrar dentro del modal
- */
+
+
+
 const ModalPersonalizado = ({ visible, onClose, children }) => (
   <Modal
     visible={visible}
@@ -33,6 +29,12 @@ const ModalPersonalizado = ({ visible, onClose, children }) => (
     </View>
   </Modal>
 );
+
+
+
+
+
+
 
 export default function App() {
   const [modalVisible, setModalVisible] = useState(false);
