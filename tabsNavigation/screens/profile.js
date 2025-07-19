@@ -1,13 +1,17 @@
-import { View, Text, StyleSheet } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function Profile() {
+export default function Profile({ navigation }) {
   return (
     <View style={styles.container}>
-      <View style={styles.iconRow}>
-        <Ionicons name="person-outline" size={28} color="green" />
-        <Text style={styles.title}>Perfil de usuario</Text>
-      </View>
+      <Text color="blue" style={styles.title}>Perfil usuario</Text>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Detalle")}
+      >
+        <Text style={styles.buttonText}>Detalles de usuario</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -20,14 +24,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-  iconRow: {
-    flexDirection: "column",
-    alignItems: "center",
-  },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
-    marginLeft: 10,
-    color: "green",
+    marginBottom: 30,
+    color: "#333",
+  },
+  button: {
+    backgroundColor: "#007BFF",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
