@@ -1,270 +1,167 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from "react";
 import {
-  View, Text, SectionList, TouchableOpacity,
-  ActivityIndicator, ScrollView, Image, StyleSheet, Modal, SafeAreaView
-} from 'react-native'
-import { StatusBar } from 'expo-status-bar'
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Modal,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+
+
+
+
+const ModalPersonalizado = ({ visible, onClose, children }) => (
+  <Modal
+    visible={visible}
+    transparent={true}
+    animationType="fade"
+    onRequestClose={onClose}
+  >
+    <View style={styles.modalBackground}>
+      <View style={styles.modalBox}>
+        {children}
+        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+          <Text style={styles.buttonText}>CERRAR</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </Modal>
+);
+
+
+
+
+
+
 
 export default function App() {
-  const categorias = [ 'Aventura', 'Terror', 'Ciencia Ficción', 'Romance']
-  const mapa = { Ficción:'Fiction', Historia:'History', Tecnología:'Technology', Aventura:'Adventure', 
-                 Terror:'Horror', 'Ciencia Ficción':'Science Fiction', Romance:'Romance' }
-  const [categoria, setCategoria] = useState(categorias[0])
-  const [secciones, setSecciones] = useState([])
-  const [cargando, setCargando] = useState(false)
-  const [error, setError] = useState(false)
-  const [libroSeleccionado, setLibroSeleccionado] = useState(null)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [mostrarTexto, setMostrarTexto] = useState("");
 
-  useEffect(()=>{
-    setCargando(true); setError(false)
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=subject:${mapa[categoria]}&maxResults=40`)
-      .then(r=>r.json())
-      .then(j=>{
-        const items = j.items || []
-        const grupos = items.reduce((ac,x)=>{
-          const autor = x.volumeInfo.authors?.[0]||'Desconocido'
-          const libro = {
-            id: x.id,
-            titulo: x.volumeInfo.title,
-            portada: x.volumeInfo.imageLinks?.thumbnail,
-            editorial: x.volumeInfo.publisher||'',
-            descripcion: x.volumeInfo.description||'Sin descripción disponible'
-          }
-          ac[autor] = ac[autor]||[]
-          ac[autor].push(libro)
-          return ac
-        },{})
-        
-        const secs = Object.keys(grupos)
-          .filter(autor => grupos[autor].length >= 2)
-          .map(a=>({ title:a, data:grupos[a] }))
-        setSecciones(secs)
-      })
-      .catch(()=>setError(true))
-      .finally(()=>setCargando(false))
-  },[categoria])
-
-  if (cargando) return <SafeAreaView style={styles.loader}><ActivityIndicator size="large"/></SafeAreaView>
-  if (error)   return <SafeAreaView style={styles.loader}><Text style={styles.errorText}>Error de conexión</Text></SafeAreaView>
+  const handleMostrar = () => {
+    setMostrarTexto(inputValue);
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        {categorias.map(c=>(
-          <TouchableOpacity
-            key={c}
-            style={[styles.button, c===categoria&&styles.activeButton]}
-            onPress={()=>setCategoria(c)}
-          >
-            <Text style={[styles.buttonText, c===categoria&&styles.activeButtonText]}>{c}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <SectionList
-        sections={secciones}
-        keyExtractor={item=>item.id}
-        renderSectionHeader={({section})=><Text style={styles.author}>{section.title}</Text>}
-        renderItem={({item})=>(
-          <TouchableOpacity 
-            style={styles.bookItem}
-            onPress={()=>setLibroSeleccionado(item)}
-          >
-            {item.portada && <Image source={{uri:item.portada}} style={styles.cover}/>}
-            <View style={styles.details}>
-              <Text style={styles.title} numberOfLines={2}>{item.titulo}</Text>
-              <Text style={styles.publisher}>{item.editorial}</Text>
-              <Text style={styles.description} numberOfLines={3}>{item.descripcion}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
-      
-      <Modal
-        visible={libroSeleccionado !== null}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={()=>setLibroSeleccionado(null)}
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.openButton}
+        onPress={() => setModalVisible(true)}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <TouchableOpacity 
-              style={styles.closeButton}
-              onPress={()=>setLibroSeleccionado(null)}
-            >
-              <Text style={styles.closeButtonText}>×</Text>
-            </TouchableOpacity>
-            {libroSeleccionado && (
-              <>
-                <View style={styles.modalHeader}>
-                  {libroSeleccionado.portada && (
-                    <Image source={{uri:libroSeleccionado.portada}} style={styles.modalCover}/>
-                  )}
-                  <View style={styles.modalTitleSection}>
-                    <Text style={styles.modalTitle}>{libroSeleccionado.titulo}</Text>
-                    <Text style={styles.modalPublisher}>{libroSeleccionado.editorial}</Text>
-                  </View>
-                </View>
-                <ScrollView style={styles.modalDescriptionContainer}>
-                  <Text style={styles.modalDescription}>{libroSeleccionado.descripcion}</Text>
-                </ScrollView>
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
-      
-      <StatusBar style="auto"/>
-    </SafeAreaView>
-  )
+        <Text style={styles.buttonText}>MOSTRAR MODAL</Text>
+      </TouchableOpacity>
+
+      <ModalPersonalizado
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      >
+        <Text style={styles.modalText}>¡Este es un modal estructurado!</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Escribe algo aquí..."
+          placeholderTextColor="#aaa"
+          value={inputValue}
+          onChangeText={setInputValue}
+        />
+        <TouchableOpacity style={styles.showButton} onPress={handleMostrar}>
+          <Text style={styles.buttonText}>MOSTRAR</Text>
+        </TouchableOpacity>
+        {mostrarTexto !== "" && (
+          <Text style={styles.resultado}>
+            Lo escrito:{" "}
+            <Text style={styles.resultadoTexto}>{mostrarTexto}</Text>
+          </Text>
+        )}
+      </ModalPersonalizado>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    backgroundColor:'#fff',
-    padding:12
+    flex: 1,
+    backgroundColor: "#f4f4f4",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  header: {
-    flexDirection:'row',
-    justifyContent:'space-around',
-    marginBottom:12,
-    marginTop:8
+  openButton: {
+    backgroundColor: "#2196F3",
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 8,
+    marginBottom: 10,
+    elevation: 2,
   },
-  button: {
-    paddingVertical:8,
-    paddingHorizontal:16,
-    borderRadius:20,
-    backgroundColor:'#e9ecef'
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  activeButton: {
-    backgroundColor:'#007bff'
+  modalBox: {
+    backgroundColor: "white",
+    padding: 28,
+    borderRadius: 18,
+    width: 320,
+    alignItems: "center",
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
-  buttonText: {
-    color:'#495057',
-    fontSize:14,
-    fontWeight:'500'
+  modalText: {
+    fontSize: 22,
+    marginBottom: 18,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#222",
   },
-  activeButtonText: {
-    color:'#fff'
+  input: {
+    width: "100%",
+    borderColor: "#2196F3",
+    borderWidth: 1.5,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 16,
+    fontSize: 17,
+    backgroundColor: "#f9f9f9",
+    color: "#222",
   },
-  author: {
-    fontSize:16,
-    fontWeight:'bold',
-    backgroundColor:'#f8f9fa',
-    padding:8,
-    marginTop:8
-  },
-  bookItem: {
-    flexDirection:'row',
-    backgroundColor:'#ffffff',
-    marginVertical:4,
-    borderRadius:8,
-    elevation:2,
-    shadowColor:'#000',
-    shadowOffset:{width:0,height:1},
-    shadowOpacity:0.1,
-    shadowRadius:2
-  },
-  cover: {
-    width:60,
-    height:90,
-    margin:8,
-    borderRadius:4
-  },
-  details: {
-    flex:1,
-    padding:8,
-    justifyContent:'space-between'
-  },
-  title: {
-    fontSize:15,
-    fontWeight:'600',
-    color:'#212529',
-    marginBottom:4
-  },
-  publisher: {
-    fontSize:12,
-    color:'#6c757d',
-    marginBottom:6
-  },
-  description: {
-    fontSize:12,
-    color:'#495057',
-    lineHeight:16
-  },
-  loader: {
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center'
-  },
-  errorText: {
-    fontSize:16,
-    color:'#dc3545'
-  },
-  modalOverlay: {
-    flex:1,
-    backgroundColor:'rgba(0,0,0,0.5)',
-    justifyContent:'center',
-    alignItems:'center',
-    padding:10
-  },
-  modalContent: {
-    backgroundColor:'#fff',
-    borderRadius:12,
-    padding:20,
-    height:'90%',
-    width:'95%',
-    maxHeight:'90%'
+  showButton: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    marginBottom: 14,
+    elevation: 2,
   },
   closeButton: {
-    position:'absolute',
-    right:10,
-    top:10,
-    zIndex:1,
-    width:30,
-    height:30,
-    borderRadius:15,
-    backgroundColor:'#f8f9fa',
-    justifyContent:'center',
-    alignItems:'center'
+    backgroundColor: "#FF5252",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    marginTop: 8,
+    elevation: 2,
   },
-  closeButtonText: {
-    fontSize:20,
-    color:'#495057',
-    fontWeight:'bold'
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
+    letterSpacing: 1,
   },
-  modalHeader: {
-    flexDirection:'row',
-    marginBottom:16,
-    paddingTop:10
+  resultado: {
+    marginTop: 10,
+    fontSize: 17,
+    color: "#333",
+    textAlign: "center",
   },
-  modalCover: {
-    width:80,
-    height:120,
-    borderRadius:6,
-    marginRight:16
+  resultadoTexto: {
+    color: "#2196F3",
+    fontWeight: "bold",
   },
-  modalTitleSection: {
-    flex:1,
-    justifyContent:'center'
-  },
-  modalTitle: {
-    fontSize:18,
-    fontWeight:'bold',
-    color:'#212529',
-    marginBottom:8
-  },
-  modalPublisher: {
-    fontSize:14,
-    color:'#6c757d'
-  },
-  modalDescriptionContainer: {
-    flex:1
-  },
-  modalDescription: {
-    fontSize:15,
-    color:'#495057',
-    lineHeight:22,
-    textAlign:'justify'
-  }
-})
+});
